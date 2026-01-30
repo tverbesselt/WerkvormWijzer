@@ -73,7 +73,7 @@ export function Wizard({ questions }: WizardProps) {
         return (
             <div className="px-8 py-10 space-y-12">
                 <div className="flex flex-col items-center gap-2">
-                    <span className="text-6xl font-black text-indigo-600 tracking-tighter tabular-nums animate-in zoom-in slide-in-from-bottom-2 duration-300">
+                    <span className="text-6xl font-black text-teal-600 tracking-tighter tabular-nums animate-in zoom-in slide-in-from-bottom-2 duration-300">
                         {currentAnswerValue !== undefined ? currentAnswerValue : "?"}
                     </span>
                     <span className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
@@ -106,7 +106,7 @@ export function Wizard({ questions }: WizardProps) {
                 <Progress value={progress} className="h-1.5" />
             </div>
 
-            <Card className="min-h-[400px] flex flex-col glass-panel border-indigo-100 shadow-xl">
+            <Card className="min-h-[400px] flex flex-col glass-panel border-teal-100 shadow-xl">
                 <CardHeader className="text-center pb-2">
                     {/* Add category badge/icon later if needed */}
                     <CardTitle className="text-2xl md:text-3xl font-bold leading-tight text-slate-900 mt-4">
@@ -136,7 +136,7 @@ export function Wizard({ questions }: WizardProps) {
                         <ArrowLeft className="mr-2 h-4 w-4" /> Vorige
                     </Button>
 
-                    <Button onClick={handleNext} className="ml-auto bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-500/30">
+                    <Button onClick={handleNext} className="ml-auto bg-teal-600 hover:bg-teal-700 shadow-lg shadow-teal-500/30">
                         {currentStep === questions.length - 1 ? (
                             <>Bekijk Resultaten <CheckCircle2 className="ml-2 h-4 w-4" /></>
                         ) : (

@@ -47,9 +47,9 @@
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.11 0.05 222);
 
-    --primary: oklch(0.53 0.25 265);
-    /* Indigo-ish in OKLCH approx */
-    --primary-foreground: oklch(0.98 0 210);
+    --primary: #00C2B8;
+    /* User Custom Teal */
+    --primary-foreground: #ffffff;
 
     --secondary: oklch(0.96 0 210);
     --secondary-foreground: oklch(0.11 0.05 222);
@@ -65,7 +65,7 @@
 
     --border: oklch(0.91 0 214);
     --input: oklch(0.91 0 214);
-    --ring: oklch(0.53 0.25 265);
+    --ring: #00C2B8;
 
     --radius: 0.75rem;
   }
@@ -87,7 +87,7 @@
 
 /* Custom Utilities for "Premium" Feel */
 .glass-panel {
-  @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl shadow-indigo-500/10;
+  @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl shadow-teal-500/10;
 }
 
 .animate-fade-in {

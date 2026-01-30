@@ -19,12 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="nl" className="h-full">
-      <body className={cn(outfit.className, "h-full bg-slate-50 text-slate-900 antialiased selection:bg-indigo-500 selection:text-white")}>
+      <body className={cn(outfit.className, "h-full bg-slate-50 text-slate-900 antialiased selection:bg-teal-500 selection:text-white")}>
         <div className="flex min-h-full flex-col">
           <header className="sticky top-0 z-50 w-full border-b border-slate-200/60 bg-white/80 backdrop-blur-md">
-
             <div className="container mx-auto flex h-16 items-center px-4">
-              <Link href="/" className="flex items-center">
+              <Link href="/" className="flex items-center gap-3">
                 <Image
                   src="/logo.png"
                   alt="CVO Antwerpen Logo"
@@ -33,6 +32,9 @@ export default function RootLayout({
                   className="h-10 w-auto object-contain"
                   priority
                 />
+                <span className="hidden sm:inline-block text-xl font-bold tracking-tight text-slate-900 border-l border-slate-300 pl-3 ml-1">
+                  Werkvorm<span className="text-teal-600">Wijzer</span>
+                </span>
               </Link>
             </div>
           </header>
@@ -43,7 +45,7 @@ export default function RootLayout({
             <p>&copy; {new Date().getFullYear()} CVO Antwerpen. Alle rechten voorbehouden.</p>
           </footer>
         </div>
-      </body>
-    </html>
+      </body >
+    </html >
   );
 }

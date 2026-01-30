@@ -41,9 +41,9 @@ export function ResultsRadarChart({ scores }: RadarChartProps) {
                     <Radar
                         name="Jouw Profiel"
                         dataKey="score"
-                        stroke="#4f46e5" // Indigo-600
+                        stroke="#00C2B8" // Primary Teal
                         strokeWidth={3}
-                        fill="#6366f1" // Indigo-500
+                        fill="#00C2B8" // Primary Teal
                         fillOpacity={0.4}
                     />
                     <Tooltip

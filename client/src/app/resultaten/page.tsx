@@ -68,8 +68,8 @@ export default function ResultatenPage() {
             <div ref={reportRef} className="bg-slate-50 p-4 sm:p-8 rounded-xl border border-slate-200 shadow-sm print:shadow-none print:border-none">
 
                 {/* Intro / Disclaimer */}
-                <div className="mb-8 p-4 bg-indigo-50 border-l-4 border-indigo-500 rounded text-sm text-indigo-900 flex items-start gap-3">
-                    <AlertCircle className="h-5 w-5 shrink-0 mt-0.5 text-indigo-600" />
+                <div className="mb-8 p-4 bg-teal-50 border-l-4 border-teal-500 rounded text-sm text-teal-900 flex items-start gap-3">
+                    <AlertCircle className="h-5 w-5 shrink-0 mt-0.5 text-teal-600" />
                     <div>
                         <p className="font-semibold mb-1">Belangrijk: Dit is een zelfinschatting.</p>
                         <p>
