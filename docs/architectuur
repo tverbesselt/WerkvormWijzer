@@ -1,0 +1,253 @@
+Project Architecture & Tech Stack Guide (2026-ready)
+
+A practical, modern blueprint for building maintainable Next.js apps with Clean Architecture + DDD, aligned with current ecosystem defaults (App Router, React 19.x, ESLint flat config, modern browser targets).
+
+Table of Contents
+
+Tech Stack Overview
+
+Architecture Pattern
+
+Project Structure
+
+Key Libraries & Their Roles
+
+Dependency Flow
+
+Development Workflow
+
+Testing Strategy
+
+Deployment & DevOps
+
+Modern Next.js Standards
+
+Tech Stack Overview
+Runtime & Platform
+
+Node.js ≥ 20.9 (minimum for Next.js 16).
+
+Recommendation: run on a current LTS line (e.g., Node 24 LTS) to stay secure/maintained.
+
+Core Framework
+
+Next.js 16 (App Router-first).
+
+React 19.x (current docs track React 19.2 as latest).
+
+TypeScript 5.x (recommended: TS 5.9 stable line right now).
+
+State, Data, and Forms
+
+TanStack Query v5 for server-state in client components (cache, sync, mutations).
+
+Zustand for small client-only global state (UI + preferences).
+
+React Hook Form + Zod v4 for forms & validation.
+
+Auth
+
+Keycloak (OIDC). Keep Keycloak JS only where you truly need a browser adapter; otherwise prefer server-side OIDC flows. (Keycloak releases are actively maintained.)
+
+UI & Styling
+
+Tailwind CSS v4 (modern browser baseline: Chrome 111+, Safari 16.4+, Firefox 128+).
+
+Component primitives: Headless UI or Radix/shadcn-style approach (pick one and standardize).
+
+Tooling & Quality
+
+ESLint 9 with flat config (default; .eslintrc is legacy).
+
+Optional: Prettier (formatting) + lint-staged/husky (pre-commit).
+
+Architecture Pattern
+
+This project uses Clean Architecture + DDD + SOLID, but updated for modern Next.js:
+
+Layering (unchanged idea, updated boundaries)
+
+Domain: pure business logic, no framework imports.
+
+Application (Use Cases): orchestration, DTOs, mappers.
+
+Infrastructure: external I/O (HTTP, auth, storage adapters).
+
+Presentation: UI + client hooks + view models.
+
+Modern constraint: Next.js introduces execution environments (server components, client components, route handlers, server actions). Treat those as delivery mechanisms around your layers, not as “business logic locations”.
+
+Project Structure
+
+A clean, Next.js-16-friendly structure that keeps “framework code” near /app, while keeping your core testable:
+
+project-root/
+├── src/
+│   ├── domain/
+│   │   ├── entities/
+│   │   ├── value-objects/
+│   │   ├── repositories/            # interfaces only
+│   │   ├── services/
+│   │   └── exceptions/
+│   │
+│   ├── application/                 # (rename from use-cases for clarity)
+│   │   ├── use-cases/
+│   │   ├── dtos/
+│   │   └── mappers/
+│   │
+│   ├── infrastructure/
+│   │   ├── api/
+│   │   ├── repositories/            # implementations
+│   │   ├── auth/
+│   │   ├── storage/
+│   │   ├── config/
+│   │   └── di/                      # optional (see DI note below)
+│   │
+│   ├── presentation/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── stores/
+│   │   └── providers/
+│   │
+│   └── shared/
+│       ├── types/
+│       ├── utils/
+│       └── constants/
+│
+├── app/                             # Next.js App Router (route tree)
+│   ├── layout.tsx
+│   ├── page.tsx
+│   ├── globals.css
+│   ├── (public)/                    # optional route group
+│   ├── (authed)/                    # optional route group
+│   └── api/                         # route handlers (if used)
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   └── e2e/
+│
+├── public/
+├── docs/
+├── Dockerfile
+└── docker-compose.yml
+
+Naming tweak (recommended)
+
+Use application/ instead of use-cases/ as a top-level folder; it reads better and scales cleaner.
+
+Key Libraries & Their Roles
+Next.js 16
+
+App Router is the default mental model; use Server Components for server-side data and Client Components only when needed.
+
+React 19.x
+
+Align with React 19.x behavior and patterns (Suspense improvements, stable React 19 line).
+
+TypeScript 5.9
+
+Consider TS 5.9’s stable --module node20 option for predictable Node 20 semantics.
+
+ESLint 9 (flat config)
+
+Use eslint.config.(js|mjs|mts); don’t start new projects on .eslintrc.
+
+Tailwind v4
+
+Only if your supported browsers meet Tailwind v4 baseline; otherwise pin Tailwind v3.4.
+
+Dependency Flow
+
+Rule stays: dependencies flow inward.
+
+Presentation → Application → Domain
+
+Infrastructure implements Domain interfaces (repositories)
+
+Next.js-specific rule:
+
+/app routes/components should depend on presentation/application, not on infrastructure details directly.
+
+Infrastructure can be used via application or via a thin composition root.
+
+Development Workflow
+Adding a feature (recommended order)
+
+Domain: entity/value objects + repository interface
+
+Application: use case + DTO + mapping
+
+Infrastructure: repository implementation + API client
+
+Presentation: hooks/components/pages
+
+DI note (modern take)
+
+You have 2 sane options:
+
+Option A (simple, preferred in many Next.js apps): explicit constructors/factories + module-level wiring in a composition root (easier than heavy decorators).
+
+Option B (Inversify): keep it if your team is already bought in and disciplined about boundaries; remember it relies on reflection metadata + TS config requirements.
+
+Testing Strategy
+
+Next.js officially documents setup approaches for Jest, Vitest, Playwright, Cypress.
+
+Recommended split (clean and current):
+
+Unit tests: Domain + Application (pure, fast)
+
+Component tests: Presentation components (optional)
+
+E2E: Playwright (routes + auth flows + real browser)
+
+If you keep BDD/Cucumber, keep it only for a few business-critical flows—otherwise it becomes a maintenance tax.
+
+Also fix your version claims:
+
+Jest stable line is 30.0 (don’t hardcode imaginary patch versions).
+
+Deployment & DevOps
+Version requirements (make them explicit)
+
+Node ≥ 20.9 for Next.js 16.
+
+Browsers: Chrome/Edge/Firefox 111+, Safari 16.4+.
+
+Docker
+
+Keep multi-stage builds; ensure:
+
+non-root runtime user
+
+env vars injected at runtime (avoid baking secrets)
+
+minimal image footprint
+
+Modern Next.js Standards
+1) Server vs Client Components discipline
+
+Default to Server Components.
+
+Use Client Components only for:
+
+complex interactivity
+
+client-side state stores
+
+TanStack Query usage
+
+browser-only APIs
+
+2) Data fetching strategy
+
+Prefer server-side fetch in Server Components / Route Handlers when possible.
+
+Use TanStack Query in client only where it adds real value (cache + background sync).
+
+3) “Framework code” stays thin
+
+Don’t put business rules in route handlers, page components, or server actions.
+
+Put business logic in Domain/Application; call it from the Next.js layer.
