@@ -17,6 +17,8 @@ export interface Question {
     id: string;
     property: PropertyID;
     text: string;
+    options?: string[]; // Custom labels for 0, 1, 2, 3...
+    maxScore?: number;
 }
 
 export interface WorkingForm {

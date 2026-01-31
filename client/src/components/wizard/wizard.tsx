@@ -67,33 +67,45 @@ export function Wizard({ questions }: WizardProps) {
 
     // Render logic for different question types
     const renderInput = () => {
-        // All questions are now 0-10 integer scales
-        const value = typeof currentAnswerValue === 'number' ? currentAnswerValue : 5; // Default to mid-point if undefined
+        // Fallback options if none provided
+        const options = currentQuestion.options || ['0', '1', '2', '3'];
 
         return (
-            <div className="px-8 py-10 space-y-12">
-                <div className="flex flex-col items-center gap-2">
-                    <span className="text-6xl font-black text-teal-600 tracking-tighter tabular-nums animate-in zoom-in slide-in-from-bottom-2 duration-300">
-                        {currentAnswerValue !== undefined ? currentAnswerValue : "?"}
-                    </span>
-                    <span className="text-sm font-medium text-muted-foreground uppercase tracking-widest">
-                        op een schaal van 0 tot 10
-                    </span>
-                </div>
-
-                <div className="space-y-4">
-                    <Slider
-                        value={[value]}
-                        min={0}
-                        max={10}
-                        step={1}
-                        onValueChange={(vals) => handleSelect(vals[0])}
-                        className="py-4"
-                    />
-                    <div className="flex justify-between text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                        <span>Helemaal niet</span>
-                        <span>Helemaal wel</span>
-                    </div>
+            <div className="px-4 py-8 space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {options.map((label, index) => {
+                        const isSelected = currentAnswerValue === index;
+                        return (
+                            <div
+                                key={index}
+                                onClick={() => handleSelect(index)}
+                                className={cn(
+                                    "cursor-pointer relative flex flex-col items-center justify-center p-6 rounded-xl border-2 transition-all duration-200",
+                                    isSelected
+                                        ? "border-teal-500 bg-teal-50 shadow-md ring-2 ring-teal-500 ring-offset-2"
+                                        : "border-slate-200 bg-white hover:border-teal-200 hover:bg-slate-50"
+                                )}
+                            >
+                                <div className={cn(
+                                    "text-3xl font-bold mb-2 transition-colors",
+                                    isSelected ? "text-teal-700" : "text-slate-400"
+                                )}>
+                                    {index}
+                                </div>
+                                <div className={cn(
+                                    "text-sm font-medium text-center transition-colors",
+                                    isSelected ? "text-teal-900" : "text-slate-600"
+                                )}>
+                                    {label}
+                                </div>
+                                {isSelected && (
+                                    <div className="absolute top-3 right-3 text-teal-600">
+                                        <CheckCircle2 className="w-5 h-5" />
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
         );

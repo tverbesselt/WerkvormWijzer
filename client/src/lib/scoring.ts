@@ -25,7 +25,7 @@ export function calculateScores(answers: Answer[]): ScoringResult {
     const propertyScores: PropertyScore[] = PROPERTIES.map(p => ({
         property: p.id,
         score: propScores[p.id],
-        max: 30
+        max: 6 // New max score (2 questions * 3 points)
     }));
 
     // 2. Evaluate Working Forms
@@ -40,9 +40,8 @@ export function calculateScores(answers: Answer[]): ScoringResult {
             if (score < threshold) {
                 missedThresholds.push(propId);
 
-                // Critical Logic: >= 4 points below threshold for specific properties? 
-                // User said: ">= 4 punten onder drempel op een kern-eigenschap"
-                if (CORE_PROPERTIES.includes(propId) && (threshold - score) >= 4) {
+                // Critical Logic: >= 2 points below threshold for core properties
+                if (CORE_PROPERTIES.includes(propId) && (threshold - score) >= 2) {
                     criticalFailures.push(propId);
                 }
             }

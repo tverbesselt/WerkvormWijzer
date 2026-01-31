@@ -16,8 +16,8 @@ export const WORKING_FORMS: WorkingForm[] = [
         name: 'Live Online lessen (Teams)',
         description: 'Lessen volgen via de computer op vaste momenten.',
         thresholds: {
-            'self-reliance': 18, 'planning': 18, 'motivation': 18, 'focus': 20,
-            'digital': 22, 'home': 20, 'mobility': 8 // Low concern
+            'self-reliance': 4, 'planning': 4, 'motivation': 4, 'focus': 4,
+            'digital': 5, 'home': 4, 'mobility': 2
         }
     },
     {
@@ -25,8 +25,8 @@ export const WORKING_FORMS: WorkingForm[] = [
         name: 'Zelfstandig online leren',
         description: 'Video’s en teksten doornemen op eigen tempo (asynchroon).',
         thresholds: {
-            'self-reliance': 24, 'planning': 24, 'motivation': 22, 'focus': 22,
-            'digital': 20, 'home': 22, 'mobility': 6
+            'self-reliance': 5, 'planning': 5, 'motivation': 4, 'focus': 4,
+            'digital': 4, 'home': 4, 'mobility': 1
         }
     },
     {
@@ -34,8 +34,8 @@ export const WORKING_FORMS: WorkingForm[] = [
         name: 'Contactonderwijs (On Campus)',
         description: 'Lessen volgen in de klas.',
         thresholds: {
-            'self-reliance': 14, 'planning': 16, 'motivation': 16, 'focus': 18,
-            'digital': 10, 'home': 12, 'mobility': 22 // High concern
+            'self-reliance': 3, 'planning': 3, 'motivation': 3, 'focus': 3,
+            'digital': 2, 'home': 2, 'mobility': 5
         }
     },
     {
@@ -43,8 +43,8 @@ export const WORKING_FORMS: WorkingForm[] = [
         name: 'Gecombineerd onderwijs (50/50)',
         description: 'Afwisseling tussen contact en online.',
         thresholds: {
-            'self-reliance': 20, 'planning': 20, 'motivation': 20, 'focus': 20,
-            'digital': 18, 'home': 18, 'mobility': 18
+            'self-reliance': 4, 'planning': 4, 'motivation': 4, 'focus': 4,
+            'digital': 4, 'home': 4, 'mobility': 4
         }
     },
     {
@@ -52,8 +52,8 @@ export const WORKING_FORMS: WorkingForm[] = [
         name: 'Werkplekleren',
         description: 'Leren op de werkvloer.',
         thresholds: {
-            'self-reliance': 20, 'planning': 18, 'motivation': 22, 'focus': 18,
-            'digital': 12, 'home': 14, 'mobility': 20
+            'self-reliance': 4, 'planning': 4, 'motivation': 4, 'focus': 4,
+            'digital': 2, 'home': 3, 'mobility': 4
         }
     },
     {
@@ -61,65 +61,94 @@ export const WORKING_FORMS: WorkingForm[] = [
         name: 'Groepswerk online',
         description: 'Samenwerken aan online projecten.',
         thresholds: {
-            'self-reliance': 18, 'planning': 20, 'motivation': 18, 'focus': 18,
-            'digital': 22, 'home': 18, 'mobility': 6
+            'self-reliance': 4, 'planning': 4, 'motivation': 4, 'focus': 4,
+            'digital': 5, 'home': 4, 'mobility': 1
         }
     },
 ];
 
 export const QUESTIONS: Question[] = [
-    // Zelfredzaamheid
-    { id: 'z1', property: 'self-reliance', text: 'Als je een opdracht krijgt, hoe snel kan je zelfstandig starten zonder extra uitleg?' },
-    { id: 'z2', property: 'self-reliance', text: 'Als je vastzit, hoe vaak vind je zelf een oplossing vóór je hulp vraagt?' },
-    { id: 'z3', property: 'self-reliance', text: 'Hoe goed kan je een taak afronden zonder dat iemand je opvolgt?' },
+    // 1) Zelfredzaamheid (0–6)
+    {
+        id: 'z1', property: 'self-reliance',
+        text: 'Hoe vlot kan je starten met een opdracht zonder extra hulp?',
+        options: ['Lukt bijna nooit', 'Soms', 'Meestal', 'Bijna altijd']
+    },
+    {
+        id: 'z2', property: 'self-reliance',
+        text: 'Als je vastzit, kan je meestal zelf een eerste oplossing vinden?',
+        options: ['Bijna nooit', 'Soms', 'Meestal', 'Bijna altijd']
+    },
 
-    // Planning
-    { id: 'p1', property: 'planning', text: 'Hoe vaak plan je studiemomenten en hou je je eraan?' },
-    { id: 'p2', property: 'planning', text: 'Hoe goed kan je omgaan met deadlines (op tijd, zonder last-minute stress)?' },
-    { id: 'p3', property: 'planning', text: 'Als je week druk is, lukt het je dan toch om consequent te studeren?' },
+    // 2) Planningsvaardigheid (0–6)
+    {
+        id: 'p1', property: 'planning',
+        text: 'Plan je studietijd in en hou je je eraan?',
+        options: ['Nooit', 'Soms', 'Meestal', 'Altijd']
+    },
+    {
+        id: 'p2', property: 'planning',
+        text: 'Lever je taken meestal op tijd in?',
+        options: ['Zelden', 'Soms', 'Meestal', 'Bijna altijd']
+    },
 
-    // Motivatie
-    { id: 'm1', property: 'motivation', text: 'Als leerstof moeilijk wordt, blijf je meestal doorzetten?' },
-    { id: 'm2', property: 'motivation', text: 'Hoe groot is de kans dat je dit traject afmaakt zoals gepland?' },
-    { id: 'm3', property: 'motivation', text: 'Hoe snel haak je af als iets saai of frustrerend is?' }, // Reverse scale? User prompt implied 0-30 score, usually higher is better. "Hoe snel haak je af" -> High score should mean "Very Slow" (Good) or question implies bad trait? 
-    // IMPORTANT: For consistency "0-10" usually means 10 is good in self-assessment tools unless specified. 
-    // Let's assume 10 = "Ik haak zeer traag/niet af" (Positive). 
-    // Rephrase slightly to ensure clarity or assume user knows 10 is best property value.
-    // Original: "Hoe snel haak je af..." -> 10 = heel snel? That would be bad.
-    // FIX: Let's assume standard behavior is "Rate your capability/positivity". 
-    // But strictly reading the question "Hoe snel", 10 means "Very fast". 
-    // I will flag this or strictly implement. For MVP, I will treat the sum 0-30 as "Performance". 
-    // So I'll invert the value for this specific logic OR rephrase the question to positive. 
-    // Let's rephrase to positive for safety: "Kan je blijven doorgaan ook als iets saai of frustrerend is?" 
-    // Wait, user gave specific text. I should update text to clear positive framing or handle inversion.
-    // "Hoe snel haak je af" -> Low is good.
-    // Let's keep text but invert value in scoring? 
-    // Actually, easiest is to assume 0=Slecht (Snel afhaken), 10=Goed (Niet afhaken). 
-    // UI usually shows "Niet <-> Wel". 
-    // Let's keep text literal but add metadata? 
-    // For simplicity towards user request, I'll allow 10 to mean "High resilience" by rephrasing slightly?
-    // User said: "Scoringmodel... Eigenschapsscore 0-30". 
-    // If I score 10 on "Hoe snel", I have 30 motivation? That implies 10 is GOOD.
-    // So "Hoe snel" -> 10 means "Ik haak niet snel af". (Contextual scale).
+    // 3) Motivatie & volharding (0–6)
+    {
+        id: 'm1', property: 'motivation',
+        text: 'Als het moeilijk wordt, blijf je doorgaans doorgaan?',
+        options: ['Bijna nooit', 'Soms', 'Meestal', 'Bijna altijd']
+    },
+    {
+        id: 'm2', property: 'motivation',
+        text: 'Hoe zeker ben je dat je dit traject afmaakt?',
+        options: ['Helemaal niet zeker', 'Eerder onzeker', 'Redelijk zeker', 'Heel zeker']
+    },
 
-    // Focus
-    { id: 'f1', property: 'focus', text: 'Hoe lang kan je geconcentreerd werken zonder afleiding?' },
-    { id: 'f2', property: 'focus', text: 'Hoe goed kan je leren als er afleiding is (meldingen/geluid/mensen)?' },
-    { id: 'f3', property: 'focus', text: 'Kan je zelfstandig langere leerstukken verwerken (tekst/video) zonder te stoppen?' },
+    // 4) Concentratie & focus (0–6)
+    {
+        id: 'f1', property: 'focus',
+        text: 'Kan je 20–30 minuten geconcentreerd werken zonder afleiding?',
+        options: ['Bijna nooit', 'Soms', 'Meestal', 'Bijna altijd']
+    },
+    {
+        id: 'f2', property: 'focus',
+        text: 'Kan je tekst of video blijven volgen zonder snel af te haken?',
+        options: ['Bijna nooit', 'Soms', 'Meestal', 'Bijna altijd']
+    },
 
-    // Digital
-    { id: 'd1', property: 'digital', text: 'Hoe vlot werk je met e-mail, links, bijlagen, bestanden (downloaden/opslaan)?' },
-    { id: 'd2', property: 'digital', text: 'Hoe vlot gebruik je online tools (Teams, leerplatform, formulieren)?' },
-    { id: 'd3', property: 'digital', text: 'Als iets niet werkt (micro/camera/login), los je dat meestal zelf op?' },
+    // 5) Digitale basisvaardigheden (0–6)
+    {
+        id: 'd1', property: 'digital',
+        text: 'Kan je vlot werken met e-mail, links en bijlagen (downloaden/opslaan/terugvinden)?',
+        options: ['Lukt niet', 'Lukt met veel hulp', 'Lukt meestal', 'Lukt vlot']
+    },
+    {
+        id: 'd2', property: 'digital',
+        text: 'Kan je vlot deelnemen aan live online les (micro/camera/chat/Teams)?',
+        options: ['Lukt niet', 'Lukt met veel hulp', 'Lukt meestal', 'Lukt vlot']
+    },
 
-    // Thuissituatie
-    { id: 'h1', property: 'home', text: 'Heb je meestal een rustige plek waar je kan studeren?' },
-    { id: 'h2', property: 'home', text: 'Hoe voorspelbaar is je week (weinig onverwachte onderbrekingen)?' },
-    { id: 'h3', property: 'home', text: 'Heb je toegang tot een degelijk toestel en stabiel internet?' },
+    // 6) Thuissituatie & eigen werkplek (0–6)
+    {
+        id: 'h1', property: 'home',
+        text: 'Heb je meestal een rustige plek waar je kan studeren?',
+        options: ['Nooit', 'Soms', 'Meestal', 'Altijd']
+    },
+    {
+        id: 'h2', property: 'home',
+        text: 'Heb je meestal een toestel + stabiel internet als je wil studeren?',
+        options: ['Bijna nooit', 'Soms', 'Meestal', 'Altijd']
+    },
 
-    // Mobiliteit
-    { id: 'mo1', property: 'mobility', text: 'Kan je je betrouwbaar verplaatsen naar de campus op lesmomenten?' },
-    { id: 'mo2', property: 'mobility', text: 'Hoe haalbaar is de reistijd voor jou (heen/terug) op weekbasis?' },
-    { id: 'mo3', property: 'mobility', text: 'Hoe vaak verwacht je dat verplaatsing roet in het eten gooit?' },
-    // Again "Hoe vaak...?" -> 10 means "Nooit" (Positive) for score 30.
+    // 7) Mobiliteit & bereikbaarheid (0–6)
+    {
+        id: 'mo1', property: 'mobility',
+        text: 'Kan je je betrouwbaar verplaatsen naar de campus op lesmomenten?',
+        options: ['Bijna nooit', 'Soms', 'Meestal', 'Altijd']
+    },
+    {
+        id: 'mo2', property: 'mobility',
+        text: 'Is de reistijd voor jou haalbaar op weekbasis?',
+        options: ['Niet haalbaar', 'Soms haalbaar', 'Meestal haalbaar', 'Goed haalbaar']
+    }
 ];

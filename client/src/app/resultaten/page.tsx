@@ -6,7 +6,7 @@ import { AlertCircle } from "lucide-react";
 import { getAnswers, clearSession } from "@/lib/storage";
 import { calculateScores } from "@/lib/scoring";
 import { Answer, FormResult, PropertyScore } from "@/lib/types";
-import { PROPERTIES } from "@/lib/data";
+import { PROPERTIES, WORKING_FORMS } from "@/lib/data";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -22,6 +22,8 @@ export default function ResultatenPage() {
     const [formResults, setFormResults] = useState<FormResult[]>([]);
     const [propertyScores, setPropertyScores] = useState<PropertyScore[]>([]);
     const [loading, setLoading] = useState(true);
+    // New state for chart comparison
+    const [compareFormId, setCompareFormId] = useState<string | null>(null);
 
     useEffect(() => {
         const storedAnswers = getAnswers();
@@ -51,6 +53,9 @@ export default function ResultatenPage() {
     // Sort order: Green first, then Orange, then Red
     const statusOrder = { 'Groen': 0, 'Oranje': 1, 'Rood': 2 };
     const sortedResults = [...formResults].sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+
+    const selectedComparable = compareFormId ? WORKING_FORMS.find(f => f.id === compareFormId) : null;
+    const comparisonValues = selectedComparable?.thresholds;
 
     return (
         <div className="container mx-auto py-10 px-4 max-w-5xl">
@@ -85,10 +90,35 @@ export default function ResultatenPage() {
                     <Card className="min-h-[400px] flex flex-col">
                         <CardHeader>
                             <CardTitle>Jouw Profiel</CardTitle>
-                            <CardDescription>Jouw scores op de 7 eigenschappen (0-30)</CardDescription>
+                            <CardDescription>Jouw scores op de 7 eigenschappen (0-6)</CardDescription>
                         </CardHeader>
-                        <CardContent className="flex-1 min-h-[300px]">
-                            <ResultsRadarChart scores={propertyScores} />
+                        <CardContent className="flex-1 min-h-[300px] flex flex-col">
+                            <ResultsRadarChart
+                                scores={propertyScores}
+                                comparisonValues={comparisonValues}
+                                comparisonName={selectedComparable?.name}
+                            />
+
+                            {/* Comparison Buttons */}
+                            <div className="mt-6">
+                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 text-center">Vergelijk met vereisten voor:</p>
+                                <div className="flex flex-wrap gap-2 justify-center">
+                                    {WORKING_FORMS.map(form => (
+                                        <Button
+                                            key={form.id}
+                                            variant={compareFormId === form.id ? "default" : "outline"}
+                                            size="sm"
+                                            onClick={() => setCompareFormId(compareFormId === form.id ? null : form.id)}
+                                            className={cn(
+                                                "text-xs h-8",
+                                                compareFormId === form.id ? "bg-slate-700 hover:bg-slate-800 text-white border-slate-700" : "text-slate-600 border-slate-200"
+                                            )}
+                                        >
+                                            {form.name}
+                                        </Button>
+                                    ))}
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
 

@@ -10,13 +10,16 @@ import {
     PolarRadiusAxis,
     ResponsiveContainer,
     Tooltip,
+    Legend,
 } from "recharts";
 
 interface RadarChartProps {
     scores: PropertyScore[];
+    comparisonValues?: Record<string, number>;
+    comparisonName?: string;
 }
 
-export function ResultsRadarChart({ scores }: RadarChartProps) {
+export function ResultsRadarChart({ scores, comparisonValues, comparisonName }: RadarChartProps) {
     // Transform data for Recharts
     // Map scores to include Property Name
     const data = scores.map((s) => {
@@ -24,7 +27,8 @@ export function ResultsRadarChart({ scores }: RadarChartProps) {
         return {
             subject: prop ? prop.name : s.property,
             score: s.score,
-            fullMark: 30, // Max score per property
+            threshold: comparisonValues ? (comparisonValues[s.property] || 0) : 0,
+            fullMark: 6, // Max score per property
         };
     });
 
@@ -37,7 +41,9 @@ export function ResultsRadarChart({ scores }: RadarChartProps) {
                         dataKey="subject"
                         tick={{ fill: '#475569', fontSize: 11, fontWeight: 500 }}
                     />
-                    <PolarRadiusAxis angle={30} domain={[0, 30]} tick={false} axisLine={false} />
+                    <PolarRadiusAxis angle={30} domain={[0, 6]} tick={false} axisLine={false} />
+
+                    {/* User Score Radar */}
                     <Radar
                         name="Jouw Profiel"
                         dataKey="score"
@@ -46,10 +52,25 @@ export function ResultsRadarChart({ scores }: RadarChartProps) {
                         fill="#00C2B8" // Primary Teal
                         fillOpacity={0.4}
                     />
+
+                    {/* Comparison Radar (if available) */}
+                    {comparisonValues && (
+                        <Radar
+                            name={comparisonName || "Minimum"}
+                            dataKey="threshold"
+                            stroke="#64748b" // Slate 500
+                            strokeWidth={2}
+                            strokeDasharray="5 5"
+                            fill="#94a3b8"
+                            fillOpacity={0.1}
+                        />
+                    )}
+
                     <Tooltip
-                        formatter={(value: any) => [`${value}/30`, 'Score']}
+                        formatter={(value: any, name: any) => [`${value}/6`, name]}
                         contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                     />
+                    <Legend />
                 </RadarChart>
             </ResponsiveContainer>
         </div>
